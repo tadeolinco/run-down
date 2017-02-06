@@ -1,3 +1,71 @@
-<h1>
-  {{title}}
-</h1>
+<div *ngIf="!userType">
+    <div class="ui middle aligned centered grid">
+        <div class="row">
+            <div class="two wide computer eight wide phone column">
+                <button class="ui fluid button"
+                    (click)="setUserType('view')">
+                    View
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="two wide computer eight wide phone column">
+                <button class="ui fluid button"
+                    (click)="setUserType('edit')">
+                    Edit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="userType === 'view'">
+    <div class="ui form grid container">
+        <div class="row">
+            <div class="sixteen wide column">
+                <div class="ui fluid labeled input field">
+                    <select #commView
+                        (change)="changeCommittee(commView.value)">
+                        <option *ngFor="let committee of committees"
+                            [value]="committee">
+                            {{committee | capitalize}}
+                        </option>
+                    </select>
+                    <div class="ui label">Committee</div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="sixteen wide column">
+                <div id="view-md"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="userType === 'edit'">
+    <div class="ui form grid container">
+        <div class="row">
+            <div class="sixteen wide column">
+                <div class="ui fluid labeled input field">
+                    <select #commEdit
+                        (change)="changeCommittee(commEdit.value)"
+                        name="committee">
+                        <option *ngFor="let committee of committees"
+                            [value]="committee">
+                            {{committee | capitalize}}
+                        </option>
+                    </select>
+                    <div class="ui label">Committee</div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="sixteen wide column">
+                <textarea
+                    placeholder="Enter markdown here"
+                    [(ngModel)]="entry.text"
+                    (keyup)="editorChange(entry.text)"
+                    rows="30"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
