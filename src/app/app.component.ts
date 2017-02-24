@@ -10,6 +10,7 @@ import * as MarkdownIt from 'markdown-it';
     styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+    rows = [];
     userType = '';
     entry: Entry;
     socket: SocketIOClient.Socket;
@@ -33,6 +34,8 @@ export class AppComponent implements OnInit {
     }
 
     editorChange(text) {
+        $('#edit-md').empty();
+        $('#edit-md').append(this.md.render(text));
         this.socket.emit('editor change', this.entry.committee, text);
     }
 
@@ -42,6 +45,12 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
+        
+
+        let temp = Math.round($(window).height()/75)
+        for (let i=0; i<temp; ++i) {
+            this.rows.push(0);
+        }
         this.md = new MarkdownIt();
         this.socket = io(window.location.href);
 
@@ -80,6 +89,7 @@ export class AppComponent implements OnInit {
                 if (entry.committee === committee) {
                     console.log(`Committee changed to: ${committee}`);
                     this.entry = entry;
+                    this.editorChange(entry.text);
                     break;
                 }
             }
@@ -101,6 +111,20 @@ export class AppComponent implements OnInit {
                         });
                 }
             }, 10000);
+
+            setTimeout(() => {
+            $('#edit-textarea').keydown(e => {
+                    if (e.which === 9) {
+                        e.preventDefault();
+                        let index = $('#edit-textarea').prop("selectionStart");
+                        this.entry.text = this.entry.text.slice(0, index) + '\t' +this.entry.text.slice(index);
+                        this.editorChange(this.entry.text);
+                        setTimeout(() => {
+                            $('#edit-textarea').prop("selectionEnd", index+1);
+                        }, 1);
+                    }
+                });
+            }, 1);
         }
     }
 }

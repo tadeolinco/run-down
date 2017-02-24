@@ -1,7 +1,10 @@
 <div *ngIf="!userType">
     <div class="ui middle aligned centered grid">
+        <div class="row"
+            *ngFor="let row of rows"
+        ></div>
         <div class="row">
-            <div class="two wide computer eight wide phone column">
+            <div class="four wide computer five wide tablet eight wide phone column">
                 <button class="ui fluid button"
                     (click)="setUserType('view')">
                     View
@@ -9,7 +12,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="two wide computer eight wide phone column">
+            <div class="four wide computer five wide tablet eight wide phone column">
                 <button class="ui fluid button"
                     (click)="setUserType('edit')">
                     Edit
@@ -58,13 +61,17 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="sixteen wide column">
+        <div class="row" style="height: 90vh">
+            <div class="eight wide column">
                 <textarea
+                    id="edit-textarea"
                     placeholder="Enter markdown here"
                     [(ngModel)]="entry.text"
                     (keyup)="editorChange(entry.text)"
-                    rows="30"></textarea>
+                    rows=40></textarea>
+            </div>
+            <div class="eight wide column" style="overflow-y: auto">
+                <div id="edit-md"></div>
             </div>
         </div>
     </div>

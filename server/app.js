@@ -20,8 +20,10 @@ mongoose.connect('mongodb://localhost/run-down', function (err) {
 });
 var viewers = [];
 var editors = [];
+var count = 0;
 io.on('connection', function (socket) {
-    console.log("[" + socket.id + "] User connected");
+    count++;
+    console.log("[" + count + "] User connected");
     socket.on('set user type', function (userType) {
         if (userType === 'view') {
             console.log("[" + socket.id + "] User is now a viewer");
@@ -39,7 +41,8 @@ io.on('connection', function (socket) {
         }
     });
     socket.on('disconnect', function () {
-        console.log("[" + socket.id + "] User disconnected");
+        count--;
+        console.log("[" + count + "] User disconnected");
         viewers = viewers.filter(function (id) { return id !== socket.id; });
         editors = editors.filter(function (id) { return id !== socket.id; });
     });

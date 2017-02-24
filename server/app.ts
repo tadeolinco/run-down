@@ -22,9 +22,10 @@ mongoose.connect('mongodb://localhost/run-down', err => {
 
 let viewers = [];
 let editors = [];
-
+let count = 0;
 io.on('connection', socket => {
-    console.log(`[${socket.id}] User connected`);
+    count++;
+    console.log(`[${count}] User connected`);
 
     socket.on('set user type', (userType: string) => {
         if (userType === 'view') {
@@ -43,7 +44,8 @@ io.on('connection', socket => {
     });
 
     socket.on('disconnect', () => {
-        console.log(`[${socket.id}] User disconnected`); 
+        count--;
+        console.log(`[${count}] User disconnected`); 
         viewers = viewers.filter(id => id !== socket.id);
         editors = editors.filter(id => id !== socket.id);
     });
